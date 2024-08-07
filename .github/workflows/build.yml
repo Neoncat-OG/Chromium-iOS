@@ -21,7 +21,7 @@ jobs:
       run: |
         cd $HOME
         git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-        echo "$GITHUB_WORKSPACE/depot_tools" >> $GITHUB_PATH
+        echo "$HOME/depot_tools" >> $GITHUB_PATH
 
     - name: Fetch Chromium Source
       run: |
