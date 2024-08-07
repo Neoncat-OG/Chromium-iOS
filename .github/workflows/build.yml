@@ -1,0 +1,55 @@
+name: Build iOS IPA
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Install depot_tools
+      run: |
+        cd ~
+        git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+        echo 'export PATH="$PATH:$HOME/depot_tools"' >> $GITHUB_ENV
+
+    - name: Fetch Chromium Source
+      run: |
+        cd ~
+        mkdir -p ~/chromium && cd ~/chromium
+        fetch ios
+        cd src
+        gclient sync
+
+    - name: Generate Build Files
+      run: |
+        cd ~/chromium/src
+        gn gen out/Release --args='target_os="ios" target_cpu="arm64" is_debug=false use_blink=true'
+
+    - name: Build Chromium for iOS
+      run: |
+        cd ~/chromium/src
+        ninja -C out/Release gn_all
+
+    - name: Create .ipa File
+      run: |
+        cd ~/chromium/src/out/Release
+        mkdir -p Payload
+        cp -r ios_internal_app.app Payload/
+        zip -r chromium.ipa Payload
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ios-app
+        path: ~/chromium/src/out/Release/chromium.ipa
