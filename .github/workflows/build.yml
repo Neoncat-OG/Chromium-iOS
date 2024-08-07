@@ -21,7 +21,7 @@ jobs:
       run: |
         cd $HOME
         git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-        echo 'export PATH="$PATH:$HOME/depot_tools"' >> $GITHUB_ENV
+        echo "$GITHUB_WORKSPACE/depot_tools" >> $GITHUB_PATH
 
     - name: Fetch Chromium Source
       run: |
@@ -39,7 +39,7 @@ jobs:
     - name: Build Chromium for iOS
       run: |
         cd ~/chromium/src
-        ninja -C out/Release gn_all
+        autoninja -C out/Release gn_all
 
     - name: Create .ipa File
       run: |
