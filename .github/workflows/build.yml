@@ -27,7 +27,7 @@ jobs:
       run: |
         cd $HOME
         mkdir -p ~/chromium && cd ~/chromium
-        fetch ios
+        fetch --no-history ios 
         cd src
         gclient sync
 
