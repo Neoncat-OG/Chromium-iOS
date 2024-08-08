@@ -34,7 +34,7 @@ jobs:
     - name: Generate Build Files
       run: |
         cd ~/chromium/src
-        gn gen out/Release --args='target_os="ios" target_cpu="arm64" is_debug=false use_blink=true'
+        gn gen out/Release --args='is_debug=false target_os="ios" ios_enable_code_signing=false target_cpu="arm64" is_debug=false use_blink=true'
 
     - name: Build Chromium for iOS
       run: |
