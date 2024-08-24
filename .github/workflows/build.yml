@@ -33,17 +33,17 @@ jobs:
 
     - name: Generate Build Files
       run: |
-        cd ~/chromium/src
-        gn gen out/Release --args='is_debug=false target_os="ios" ios_enable_code_signing=false target_cpu="arm64" is_debug=false use_blink=true'
+        cd ~/chromium/src && mkdir -p out/Release-iphoneos
+        gn gen out/Release-iphoneos --args='is_debug=false target_os="ios" ios_enable_code_signing=false target_cpu="arm64" is_debug=false use_blink=true'
 
     - name: Build Chromium for iOS
       run: |
         cd ~/chromium/src
-        autoninja -C out/Release gn_all
+        autoninja -C out/Release-iphoneos gn_all
 
     - name: Create .ipa File
       run: |
-        cd ~/chromium/src/out/Release
+        cd ~/chromium/src/out/Release-iphoneos
         mkdir -p Payload
         cp -r ios_internal_app.app Payload/
         zip -r chromium.ipa Payload
@@ -52,4 +52,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ios-app
-        path: ~/chromium/src/out/Release/chromium.ipa
+        path: ~/chromium/src/out/Release-iphoneos/chromium.ipa
