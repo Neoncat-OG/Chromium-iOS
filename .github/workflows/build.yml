@@ -39,13 +39,13 @@ jobs:
     - name: Build Chromium for iOS
       run: |
         cd ~/chromium/src
-        autoninja -C out/Release-iphoneos chrome_ios
+        autoninja -C out/Release-iphoneos ios_chrome
 
     - name: Create .ipa File
       run: |
         cd ~/chromium/src/out/Release-iphoneos
         mkdir -p Payload
-        cp -r chrome_ios.app Payload/
+        cp -r ios_chrome.app Payload/
         zip -r chromium.ipa Payload
 
     - name: Upload Artifact
